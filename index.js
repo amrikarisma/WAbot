@@ -25,12 +25,10 @@ client.on('message', async msg => {
         msg.reply('pong');
     }
 
-    if (text.includes("#tanya ")) {
-        await OpenAIHandler(text, msg);
+    if (text.includes("#tanya ") || text.includes("#ask ")) {
+        await OpenAIHandler(client, msg);
     }
 
 });
 
 client.initialize();
-
-module.exports = client

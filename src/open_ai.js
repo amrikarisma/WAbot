@@ -1,24 +1,29 @@
 const axios = require('axios');
 const { OPEN_AI_KEY } = require('../config');
 
-const OpenAIHandler = async (text, msg) => {
-
+const OpenAIHandler = async (client, msg) => {
+    const text = msg.body.toLowerCase() || '';
     const cmd = text.substring(0, text.indexOf(' '));
 
     if (cmd.length < 2) {
         return msg.reply('Format Salah. ketik *#tanya<spasi>pertanyaanmu*');
     }
 
-    msg.reply('tunggu bentar ya...');
+    const contact = await msg.getContact();
+    const name = contact.pushname
 
+    // client.sendMessage(msg.from, 'Hi, ' + name);
+    // await new Promise(r => setTimeout(r, 1000));
+    msg.reply('wait...');
+    await new Promise(r => setTimeout(r, 2000));
     const question = text.substring(text.indexOf(' ') + 1);;
     const response = await ChatGPTRequest(question)
 
     if (!response.success) {
-        return msg.reply('Ada yang salah. Coba lagi nanti.');
+        return msg.reply('There is something wrong. Try again later.');
     }
 
-    return msg.reply(response.data);
+    return msg.reply(response.data.trim());
 }
 
 
